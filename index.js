@@ -20,7 +20,7 @@ function readable(fn) {
 wmctrl.list = function(cb) {
   // If no callback is passed in, act like a stream
   if(arguments.length === 0) {
-    return readable(wmctrl.list.bind(list));
+    return readable(wmctrl.list.bind(wmctrl));
   }
 
   exec('wmctrl -l -G', function(err, data) {
