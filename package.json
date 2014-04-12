@@ -1,0 +1,33 @@
+{
+  "name": "node-wmctrl",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ashaffer/node-wmctrl.git"
+  },
+  "keywords": [
+    "wmctrl",
+    "node",
+    "wmctrl",
+    "window",
+    "management"
+  ],
+  "author": "ashaffer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ashaffer/node-wmctrl/issues"
+  },
+  "homepage": "https://github.com/ashaffer/node-wmctrl",
+  "devDependencies": {
+    "mocha": "^1.18.2",
+    "chai": "^1.9.1"
+  },
+  "dependencies": {
+    "event-stream": "^3.1.1"
+  }
+}
