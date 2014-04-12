@@ -1,6 +1,7 @@
 var exec = require('child_process').exec;
-var Parser = require('./parser');
+var Parser = require('simple-parser');
 var es = require('event-stream');
+var xwininfo = require('xwininfo');
 
 var wmctrl = module.exports = {};
 
@@ -13,6 +14,7 @@ function readable(fn) {
       else data.map(function(item) {
         self.emit('data', item);
       });
+      self.emit('end');
     });
   });
 }
@@ -25,9 +27,10 @@ wmctrl.list = function(cb) {
 
   exec('wmctrl -l -G', function(err, data) {
     if(err) return cb(err, null);
-    cb(null, data.split('\n').filter(Boolean).map(function(line) {
+    var hash = {};
+    var wnds = data.split('\n').filter(Boolean).map(function(line) {
       var parser = new Parser(line);
-      return {
+      var wnd = {
         id: parser.hex(),
         desktop_number: parser.num(),
         x: parser.num(),
@@ -37,7 +40,20 @@ wmctrl.list = function(cb) {
         machine_name: parser.string(),
         title: parser.rest()
       };
-    }));
+      hash[wnd.id] = wnd;
+      return wnd;
+    });
+
+    xwininfo.root(function(err, data) {
+      if(err) return cb(err);
+      // Decorate our windows with their stack order
+      data.forEach(function(item, idx) {
+        if(hash[item.id])
+          hash[item.id].order = idx;
+      });
+
+      cb(null, wnds);
+    });
   });
 };
 
